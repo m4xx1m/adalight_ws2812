@@ -9,6 +9,7 @@
 #include "FastLED.h"
 #define NUM_LEDS 240
 #define DATA_PIN 6
+#define START_WHITE 25
 
 // Baudrate, higher rate allows faster refresh rate and more LEDs (defined in /etc/boblight.conf)
 #define serialRate 115200
@@ -22,15 +23,15 @@ CRGB leds[NUM_LEDS];
 void setup() {
   // Use NEOPIXEL to keep true colors
   FastLED.addLeds<NEOPIXEL, DATA_PIN>(leds, NUM_LEDS);
+ 
   
-  // Initial RGB flash
-  LEDS.showColor(CRGB(255, 0, 0));
-  delay(500);
-  LEDS.showColor(CRGB(0, 255, 0));
-  delay(500);
-  LEDS.showColor(CRGB(0, 0, 255));
-  delay(500);
-  LEDS.showColor(CRGB(0, 0, 0));
+  // White color for working without pc
+  FastLED.clear();
+  FastLED.show();
+  for (i = 0; i <= START_WHITE; i++) {
+    LEDS.showColor(CRGB(i, i, i));
+    delay(20);
+  }  
   
   Serial.begin(serialRate);
   // Send "Magic Word" string to host
